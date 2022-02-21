@@ -56,6 +56,13 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Banljus</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="2">
          <widget class="QPushButton" name="button_banljus_on">
           <property name="minimumSize">
@@ -66,13 +73,6 @@
           </property>
           <property name="text">
            <string>på</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Banljus</string>
           </property>
          </widget>
         </item>
@@ -497,7 +497,81 @@
              <number>10</number>
             </property>
             <item row="3" column="0">
-             <widget class="QComboBox" name="comboBox"/>
+             <widget class="QGroupBox" name="groupBox_7">
+              <property name="title">
+               <string>Flygplats</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_18">
+               <item row="0" column="0">
+                <layout class="QGridLayout" name="gridLayout_17">
+                 <property name="bottomMargin">
+                  <number>10</number>
+                 </property>
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item row="1" column="0">
+                  <widget class="QComboBox" name="comboBox_airports">
+                   <property name="editable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <layout class="QGridLayout" name="gridLayout_16">
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item row="0" column="1">
+                    <widget class="QPushButton" name="land_bi">
+                     <property name="text">
+                      <string>BI-B</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QPushButton" name="land_hb">
+                     <property name="text">
+                      <string>HB</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QPushButton" name="button_land_update">
+                   <property name="text">
+                    <string>Uppdatera Lista</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QGroupBox" name="groupBox_6">
+                   <property name="title">
+                    <string>Riktning</string>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout">
+                    <item>
+                     <widget class="QPushButton" name="land_rikt_n">
+                      <property name="text">
+                       <string>normal</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="land_rikt_inv">
+                      <property name="text">
+                       <string>omvänd</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </item>
             <item row="2" column="0">
              <widget class="QGroupBox" name="groupBox_5">
@@ -523,7 +597,7 @@
                <item row="0" column="0">
                 <layout class="QGridLayout" name="gridLayout_14">
                  <item row="0" column="0">
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="snabb_eskn_1">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -542,7 +616,7 @@
                   </widget>
                  </item>
                  <item row="0" column="2">
-                  <widget class="QPushButton" name="pushButton_3">
+                  <widget class="QPushButton" name="snabb_eskn_3">
                    <property name="minimumSize">
                     <size>
                      <width>10</width>
@@ -555,7 +629,7 @@
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QPushButton" name="pushButton_2">
+                  <widget class="QPushButton" name="snabb_eskn_2">
                    <property name="minimumSize">
                     <size>
                      <width>10</width>
@@ -568,7 +642,7 @@
                   </widget>
                  </item>
                  <item row="0" column="3">
-                  <widget class="QPushButton" name="pushButton_4">
+                  <widget class="QPushButton" name="snabb_eskn_4">
                    <property name="minimumSize">
                     <size>
                      <width>10</width>
@@ -585,7 +659,7 @@
               </layout>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="9" column="0">
              <widget class="QPushButton" name="pushButton_6">
               <property name="text">
                <string>TILS</string>
@@ -606,7 +680,7 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
+            <item row="10" column="0">
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -619,54 +693,44 @@
               </property>
              </spacer>
             </item>
-            <item row="4" column="0">
-             <layout class="QGridLayout" name="gridLayout_16">
-              <property name="bottomMargin">
-               <number>10</number>
-              </property>
-              <item row="0" column="1">
-               <widget class="QPushButton" name="land_bi">
-                <property name="text">
-                 <string>BI-B</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QPushButton" name="land_hb">
-                <property name="text">
-                 <string>HB</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="5" column="0">
-             <widget class="QGroupBox" name="groupBox_6">
-              <property name="title">
-               <string>Riktning</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <item>
-                <widget class="QPushButton" name="land_rikt_n">
-                 <property name="text">
-                  <string>normal</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="land_rikt_inv">
-                 <property name="text">
-                  <string>omvänd</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
            </layout>
           </item>
          </layout>
         </widget>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QGroupBox" name="groupBox_8">
+        <property name="title">
+         <string>Tanka</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QPushButton" name="button_tanka_20">
+             <property name="text">
+              <string>20 (larm)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="button_tanka_50">
+             <property name="text">
+              <string>50</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="button_tanka_100">
+             <property name="text">
+              <string>100</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

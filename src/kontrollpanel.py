@@ -15,6 +15,7 @@ import time
 import colorsys
 import traceback
 import threading
+from math import sin, cos, sqrt, atan2, radians
 
 from pathlib import Path
 import XPlaneUdp
@@ -58,6 +59,8 @@ def getDistanceGPS(lat1,lon1, lat2, lon2):
 
     #print("Result:", distance)
     return distance
+def get_dist(banan):
+    return banan.get("distance")
     
 def signal_handler(sig, frame):
         print("You pressed Ctrl+C!")
@@ -217,6 +220,11 @@ class RunGUI(QMainWindow):
         connectButton(self, self.ui.button_land_mod,"JAS/io/st/di/L")
         self.ui.land_set_all.clicked.connect(self.Land_set_all)
         
+        connectValueButton(self, self.ui.land_hb,"JAS/ti/land/bibana", 0)
+        connectValueButton(self, self.ui.land_bi,"JAS/ti/land/bibana", 1)
+        connectValueButton(self, self.ui.land_rikt_n,"JAS/ti/land/rikt", 0)
+        connectValueButton(self, self.ui.land_rikt_inv,"JAS/ti/land/rikt", 1)
+        
         # connectOnButton(self, self.ui.button_apu_on,"JAS/button/apu")
         #connectOffButton(self, self.ui.button_apu_off,"JAS/button/apu")
         
@@ -237,10 +245,25 @@ class RunGUI(QMainWindow):
         
         self.ui.button_banljus_on.clicked.connect(self.banljusOn)
         self.ui.button_banljus_off.clicked.connect(self.banljusOff)
-        # self.ui.button_tanka_50.clicked.connect(self.buttonTanka50)
+        self.ui.button_tanka_20.clicked.connect(self.buttonTanka20)
+        self.ui.button_tanka_50.clicked.connect(self.buttonTanka50)
+        self.ui.button_tanka_100.clicked.connect(self.buttonTanka100)
+        
+        
+        self.ui.button_land_update.clicked.connect(self.updateAirportBox)
+        
         # 
         # self.ui.auto_afk_text.valueChanged.connect(self.autoAFK)
         # self.ui.auto_hojd_text.valueChanged.connect(self.autoHOJD)
+        self.ui.comboBox_airports.currentTextChanged.connect(self.airportBoxOnChange)
+        
+        #Snabbval
+        ## ESKN
+        
+        self.ui.snabb_eskn_1.clicked.connect(self.ESKN1)
+        self.ui.snabb_eskn_2.clicked.connect(self.ESKN2)
+        self.ui.snabb_eskn_3.clicked.connect(self.ESKN3)
+        self.ui.snabb_eskn_4.clicked.connect(self.ESKN4)
         
         font = QFont("Sans")
         font.setPixelSize(18)
@@ -250,15 +273,44 @@ class RunGUI(QMainWindow):
         self.timer.timeout.connect(self.loop)
         self.timer.start(100)
         
-        self.timer2 = QTimer()
-        self.timer2.timeout.connect(self.updateAirportBox)
-        self.timer2.start(10000)
+        # self.timer2 = QTimer()
+        # self.timer2.timeout.connect(self.updateAirportBox)
+        # self.timer2.start(1000)
+
+    def airportBoxOnChange(self):
+        print("chagne box", self.ui.comboBox_airports.currentText())
+        self.ui.comboBox_airports.setCurrentText(self.ui.comboBox_airports.currentText().upper())
+        
+        for apt in self.airportList:
+            if (self.ui.comboBox_airports.currentText() == apt["id"] ):
+                self.xp.sendDataref("JAS/ti/land/index", apt["index"])
+                print("found airport", apt["id"], apt["index"])
 
     def updateAirportBox(self):
-        self.lat = self.xp.getDataref("sim/flightmodel/position/latitude",1)
-        self.lon = self.xp.getDataref("sim/flightmodel/position/longitude",1)
-        self.airportListClose = []
         
+        self.lat = self.xp.getDataref("sim/flightmodel/position/latitude",1)
+        
+        self.lon = self.xp.getDataref("sim/flightmodel/position/longitude",1)
+        print("updateAirportBox", self.lat, self.lon)
+        if (self.lat < 0.1 and self.lat > -0.1):
+            print("ingen egen plats", self.lat, self.lon)
+            return
+        if (self.lon < 0.1 and self.lon > -0.1):
+            print("ingen egen plats", self.lat, self.lon)
+            return
+        self.airportListClose = []
+        for apt in self.airportList:
+            apt["distance"] = getDistanceGPS(self.lat,self.lon, apt["lat"], apt["lon"])
+            self.airportListClose.append(apt)
+            
+        self.airportListClose.sort(key=get_dist)
+        print("närmaste ", self.airportListClose[0])
+        self.namelist = []
+        for apt in self.airportListClose:
+            banan = str(apt["id"])
+            self.namelist.append(banan)
+        self.ui.comboBox_airports.clear()
+        self.ui.comboBox_airports.addItems(self.namelist)
 
     def readApt(self):
         
@@ -271,14 +323,22 @@ class RunGUI(QMainWindow):
             for d in data:
                 apt = {}
                 col = d.split(";")
-                apt["id"] = col[0]
-                apt["alt"] = col[1]
-                apt["lat"] = col[2]
-                apt["lon"] = col[3]
-                apt["index"] = i
-                i = i +1
-                self.airportList.append(apt)
-                
+                if (len(col)>3):
+                    apt["id"] = col[0]
+                    apt["alt"] = float(col[1])
+                    apt["lat"] = float(col[2])
+                    apt["lon"] = float(col[3])
+                    apt["index"] = i
+                    i = i +1
+                    self.airportList.append(apt)
+        self.airportDict = {}
+        for apt in self.airportList:
+            self.airportDict[apt["id"]] = {}
+            self.airportDict[apt["id"]]["id"] = apt["id"]
+            self.airportDict[apt["id"]]["alt"] = apt["alt"]
+            self.airportDict[apt["id"]]["lat"] = apt["lat"]
+            self.airportDict[apt["id"]]["lon"] = apt["lon"]
+            self.airportDict[apt["id"]]["index"] = apt["index"]
                 
                 
     def updateGUI(self):
@@ -286,6 +346,30 @@ class RunGUI(QMainWindow):
         pass
     
     def Land_set_all(self):
+        return
+    def ESKN1(self):
+        self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
+        self.xp.sendDataref("JAS/ti/land/bana", 0)
+        self.xp.sendDataref("JAS/ti/land/bibana", 0)
+        self.xp.sendDataref("JAS/ti/land/rikt", 0)
+        return
+    def ESKN2(self):
+        self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
+        self.xp.sendDataref("JAS/ti/land/bana", 0)
+        self.xp.sendDataref("JAS/ti/land/bibana", 0)
+        self.xp.sendDataref("JAS/ti/land/rikt", 1)
+        return
+    def ESKN3(self):
+        self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
+        self.xp.sendDataref("JAS/ti/land/bana", 1)
+        self.xp.sendDataref("JAS/ti/land/bibana", 1)
+        self.xp.sendDataref("JAS/ti/land/rikt", 0)
+        return
+    def ESKN4(self):
+        self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
+        self.xp.sendDataref("JAS/ti/land/bana", 1)
+        self.xp.sendDataref("JAS/ti/land/bibana", 1)
+        self.xp.sendDataref("JAS/ti/land/rikt", 1)
         return
     def banljusOn(self):
         self.xp.sendDataref("sim/operation/override/override_airport_lites", 1)
@@ -314,10 +398,12 @@ class RunGUI(QMainWindow):
         print("buttonPressed:", dataref)
         self.xp.sendDataref(dataref, value)
                  
-    def buttonTankaFull(self):
+    def buttonTanka100(self):
         self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 3000)
     def buttonTanka50(self):
         self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 1500)
+    def buttonTanka20(self):
+        self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 600)
         
     def autoAFK(self):
         newvalue = float(self.ui.auto_afk_text.value()) / 1.85200
