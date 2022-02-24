@@ -193,6 +193,8 @@ class RunGUI(QMainWindow):
         
         connectButtonCommand(self, self.ui.button_j_reload,"sim/weapons/re_arm_aircraft")
         
+        self.ui.button_j_ping.clicked.connect(self.PingAll)
+        
         
         ## A
         connectButton(self, self.ui.button_a_mod,"JAS/io/st/di/A")
@@ -225,6 +227,9 @@ class RunGUI(QMainWindow):
         connectValueButton(self, self.ui.land_rikt_n,"JAS/ti/land/rikt", 0)
         connectValueButton(self, self.ui.land_rikt_inv,"JAS/ti/land/rikt", 1)
         
+        connectValueButton(self, self.ui.luft_in,"sim/cockpit2/controls/speedbrake_ratio", 0)
+        connectValueButton(self, self.ui.luft_ut,"sim/cockpit2/controls/speedbrake_ratio", 1)
+
         # connectOnButton(self, self.ui.button_apu_on,"JAS/button/apu")
         #connectOffButton(self, self.ui.button_apu_off,"JAS/button/apu")
         
@@ -345,31 +350,54 @@ class RunGUI(QMainWindow):
     
         pass
     
+    def PingAll(self):
+        self.xp.sendDataref("JAS/radar/ping[1]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[2]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[3]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[4]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[5]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[6]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[7]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[8]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[9]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[10]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[11]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[12]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[13]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[14]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[15]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[16]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[17]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[18]", 2000)
+        self.xp.sendDataref("JAS/radar/ping[19]", 2000)
+
     def Land_set_all(self):
+        self.xp.sendDataref("JAS/ti/menu/menu", 3)
+        
         return
     def ESKN1(self):
         self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
         self.xp.sendDataref("JAS/ti/land/bana", 0)
         self.xp.sendDataref("JAS/ti/land/bibana", 0)
-        self.xp.sendDataref("JAS/ti/land/rikt", 0)
+        self.xp.sendDataref("JAS/ti/land/rikt", 1)
         return
     def ESKN2(self):
         self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
         self.xp.sendDataref("JAS/ti/land/bana", 0)
         self.xp.sendDataref("JAS/ti/land/bibana", 0)
-        self.xp.sendDataref("JAS/ti/land/rikt", 1)
+        self.xp.sendDataref("JAS/ti/land/rikt", 0)
         return
     def ESKN3(self):
         self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
         self.xp.sendDataref("JAS/ti/land/bana", 1)
         self.xp.sendDataref("JAS/ti/land/bibana", 1)
-        self.xp.sendDataref("JAS/ti/land/rikt", 0)
+        self.xp.sendDataref("JAS/ti/land/rikt", 1)
         return
     def ESKN4(self):
         self.xp.sendDataref("JAS/ti/land/index", self.airportDict["ESKN"]["index"])
         self.xp.sendDataref("JAS/ti/land/bana", 1)
         self.xp.sendDataref("JAS/ti/land/bibana", 1)
-        self.xp.sendDataref("JAS/ti/land/rikt", 1)
+        self.xp.sendDataref("JAS/ti/land/rikt", 0)
         return
     def banljusOn(self):
         self.xp.sendDataref("sim/operation/override/override_airport_lites", 1)
