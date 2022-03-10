@@ -173,7 +173,7 @@ class RunGUI(QMainWindow):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         
         ## J
-        connectButton(self, self.ui.button_j_mod,"JAS/io/st/di/J")
+        # connectButton(self, self.ui.button_j_mod,"JAS/io/st/di/J")
         connectButton(self, self.ui.button_fire,"JAS/io/spak/di/fire")
         
         # ST knappar
@@ -196,30 +196,10 @@ class RunGUI(QMainWindow):
         self.ui.button_j_ping.clicked.connect(self.PingAll)
         
         
-        ## A
-        connectButton(self, self.ui.button_a_mod,"JAS/io/st/di/A")
-        connectButton(self, self.ui.button_a_fire,"JAS/io/spak/di/fire")
-        connectButtonCommand(self, self.ui.button_a_reload,"sim/weapons/re_arm_aircraft")
-        
-        # ST knappar
-        connectButton(self, self.ui.button_a_st_hvp,"JAS/io/st/di/HVP")
-        connectButton(self, self.ui.button_a_st_ir,"JAS/io/st/di/IRB")
-        connectButton(self, self.ui.button_a_st_akan,"JAS/io/st/di/AK")
-        
-        # Spak knappar
-        
-        connectButton(self, self.ui.button_a_spak_hvp,"JAS/io/spak/di/hat1_up")
-        connectButton(self, self.ui.button_a_sijir,"JAS/io/spak/di/hat1_left")
-        connectButton(self, self.ui.button_a_sijak,"JAS/io/spak/di/hat1_right")
-        connectButton(self, self.ui.button_a_spak_ak,"JAS/io/spak/di/hat1_down")
-        
-        
-        ## S
-        connectButton(self, self.ui.button_s_mod,"JAS/io/st/di/S")
         
         
         ## Landning
-        connectButton(self, self.ui.button_land_mod,"JAS/io/st/di/L")
+        # connectButton(self, self.ui.button_land_mod,"JAS/io/st/di/L")
         self.ui.land_set_all.clicked.connect(self.Land_set_all)
         
         connectValueButton(self, self.ui.land_hb,"JAS/ti/land/bibana", 0)
@@ -254,6 +234,8 @@ class RunGUI(QMainWindow):
         self.ui.button_tanka_50.clicked.connect(self.buttonTanka50)
         self.ui.button_tanka_100.clicked.connect(self.buttonTanka100)
         
+        connectButtonCommand(self, self.ui.button_reload_acf,"sim/operation/reload_aircraft_no_art")
+        
         
         self.ui.button_land_update.clicked.connect(self.updateAirportBox)
         
@@ -273,6 +255,11 @@ class RunGUI(QMainWindow):
         font = QFont("Sans")
         font.setPixelSize(18)
         self.setFont(font)
+        
+        self.ui.tabWidget.setStyleSheet("""QTabWidget::pane { 
+                                     margin: -0px -5px -0px -5px;
+                                     
+                                    }""")
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.loop)
