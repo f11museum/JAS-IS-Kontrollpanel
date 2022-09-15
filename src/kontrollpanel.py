@@ -414,11 +414,11 @@ class RunGUI(QMainWindow):
         self.xp.sendDataref(dataref, value)
                  
     def buttonTanka100(self):
-        self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 2400)
+        self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 2200)
     def buttonTanka50(self):
-        self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 1200)
+        self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 1100)
     def buttonTanka20(self):
-        self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 480)
+        self.xp.sendDataref("sim/flightmodel/weight/m_fuel1", 440)
         
     def autoAFK(self):
         newvalue = float(self.ui.auto_afk_text.value()) / 1.85200
