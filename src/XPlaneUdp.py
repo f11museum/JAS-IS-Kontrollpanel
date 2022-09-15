@@ -4,7 +4,7 @@ import binascii
 import time
 
 
-LISTEN_PORT = 49006
+LISTEN_PORT = 49004
 SEND_PORT = 49000
 
 current_milli_time = lambda: int(round(time.time() * 1000))

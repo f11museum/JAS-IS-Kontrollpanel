@@ -166,7 +166,7 @@ class RunGUI(QMainWindow):
         current_dir = os.path.dirname(os.path.abspath(__file__))
         self.ui = uic.loadUi(os.path.join(current_dir, "../ui/kontrollpanel.ui"), self)
         # print(self.ui)
-        #self.setGeometry(200, 200, 300, 300)
+        self.setGeometry(-1920, 200, 100, 100)
         #self.resize(640, 480)
         self.setWindowTitle("JAS Kontrollpanel")
         
