@@ -10,7 +10,7 @@ SEND_PORT = 49000
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 class XPlaneUdp:
-    
+
     def __init__(self, ip, port):
         self.xip = ip
         self.xport = port
@@ -22,13 +22,14 @@ class XPlaneUdp:
         self.dataList = {}
         self.lastDataTimer = current_milli_time()
         self.connected = False
-        
+
     def readData(self):
         if (self.lastDataTimer+10000 < current_milli_time()):
             if (self.connected == False):
                 print("reconnect")
                 self.sendList = []
                 self.dataList = {}
+                time.sleep(1)
         try:
             data, addr = self.sock.recvfrom(1024)
             # print("received data:")
@@ -52,43 +53,43 @@ class XPlaneUdp:
         except BlockingIOError:
             #print('no data')
             pass
-        
-        
+
+
     def sendDataref(self, dataref, value):
         message = b'DREF0'
         message = message + struct.pack("f", float(value))
         bytestring = dataref.encode()
         message = message + bytestring + b'\00'
         #print(message)
-        
+
         for i in range(509):
             message = message+b'\x20'
 
         message = message[:509]
 
         self.sock.sendto(message, (self.xip, self.xport))
-        
+
     def sendCommand(self, dataref):
         message = b'CMND0'
-        
+
         bytestring = dataref.encode()
         message = message + bytestring + b'\00'
         #print(message)
-        
+
         for i in range(509):
             message = message+b'\x20'
 
         message = message[:509]
 
         self.sock.sendto(message, (self.xip, self.xport))
-        
+
     def getDataref(self, dataref, interval):
         if dataref not in self.dataList:
             self.createDataref(dataref, interval)
             return 0
         else:
             return self.dataList[dataref]
-        
+
     def createDataref(self, dataref, interval):
         self.sendList.append(dataref)
         self.dataList[dataref] = 0
@@ -104,4 +105,3 @@ class XPlaneUdp:
         assert(len(message)==413)
         #print(message[:50])
         self.sock.sendto(message, (self.xip, self.xport))
-
